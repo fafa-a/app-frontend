@@ -1,6 +1,5 @@
 import axios from "axios"
 import * as apiCalls from "./apiCalls"
-
 describe("apiCalls", () => {
   describe("signup", () => {
     it("calls /api/1.0/users", () => {

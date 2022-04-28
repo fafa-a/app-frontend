@@ -2,6 +2,7 @@ import React from "react"
 import { render, screen, cleanup, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom/extend-expect"
 import { UserSignupPage } from "./UserSignupPage"
+import { toBeInTheDocument } from "@testing-library/jest-dom/dist/matchers"
 
 beforeEach(cleanup)
 
@@ -56,9 +57,20 @@ describe("UserSignupPage", () => {
         },
       }
     }
+
+    const mockAsyncDelayed = () => {
+      return jest.fn().mockImplementation(() => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve({})
+          }, 300)
+        })
+      })
+    }
+
     let button, displayNameInput, usernameInput, passwordInput, passwordRepeat
     const setupForSubmit = props => {
-      render(<UserSignupPage {...props} />)
+      const view = render(<UserSignupPage {...props} />)
 
       displayNameInput = screen.queryByPlaceholderText("Your display name")
       usernameInput = screen.queryByPlaceholderText("Your username")
@@ -69,6 +81,8 @@ describe("UserSignupPage", () => {
       fireEvent.change(passwordInput, changeEvent("P4ssword"))
       fireEvent.change(passwordRepeat, changeEvent("P4ssword"))
       button = screen.getByRole("button")
+
+      return view
     }
     it("sets the displayName value into state", () => {
       render(<UserSignupPage />)
@@ -118,6 +132,26 @@ describe("UserSignupPage", () => {
         password: "P4ssword",
       }
       expect(actions.postSignup).toHaveBeenCalledWith(expectedUserObject)
+    })
+
+    it("does not allow user to click the Sign Up buton when there is an ongoing api call", () => {
+      const actions = {
+        postSignup: mockAsyncDelayed(),
+      }
+      setupForSubmit({ actions })
+      fireEvent.click(button)
+      fireEvent.click(button)
+      expect(actions.postSignup).toHaveBeenCalledTimes(1)
+    })
+    it("display spinner when there is ongoing api call", () => {
+      const actions = {
+        postSignup: mockAsyncDelayed(),
+      }
+      const { queryByText } = setupForSubmit({ actions })
+      fireEvent.click(button)
+
+      const spinner = queryByText("Loading...")
+      expect(spinner).toBeInTheDocument()
     })
   })
 })
