@@ -31,6 +31,14 @@ export class UserSignupPage extends React.Component {
       passwordRepeat: value,
     })
   }
+  onClickSignup = () => {
+    const user = {
+      username: this.state.username,
+      displayName: this.state.displayName,
+      password: this.state.password,
+    }
+    this.props.actions.postSignup(user)
+  }
   render() {
     return (
       <div>
@@ -68,11 +76,18 @@ export class UserSignupPage extends React.Component {
           />
         </div>
         <div>
-          <button>Sign Up</button>
+          <button onClick={this.onClickSignup}>Sign Up</button>
         </div>
       </div>
     )
   }
 }
-
+UserSignupPage.defaultProps = {
+  actions: {
+    postSignup: () =>
+      new Promise((resolve, reject) => {
+        resolve({})
+      }),
+  },
+}
 export default UserSignupPage
