@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, cleanup } from "@testing-library/react"
+import { render, screen, cleanup, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom/extend-expect"
 import { UserSignupPage } from "./UserSignupPage"
 
@@ -46,6 +46,39 @@ describe("UserSignupPage", () => {
       render(<UserSignupPage />)
       const button = screen.getByRole("button")
       expect(button).toBeInTheDocument()
+    })
+  })
+  describe("Interactions", () => {
+    const changeEvent = content => {
+      return {
+        target: {
+          value: content,
+        },
+      }
+    }
+    it("sets the displayName value into state", () => {
+      render(<UserSignupPage />)
+      const displayNameInput = screen.getByPlaceholderText("Your display name")
+      fireEvent.change(displayNameInput, changeEvent("my-display-name"))
+      expect(displayNameInput).toHaveValue("my-display-name")
+    })
+    it("sets the username value into state", () => {
+      render(<UserSignupPage />)
+      const usernameInput = screen.getByPlaceholderText("Your username")
+      fireEvent.change(usernameInput, changeEvent("my-username"))
+      expect(usernameInput).toHaveValue("my-username")
+    })
+    it("sets the password value into state", () => {
+      render(<UserSignupPage />)
+      const passwordInput = screen.getByPlaceholderText("Your password")
+      fireEvent.change(passwordInput, changeEvent("P4ssword"))
+      expect(passwordInput).toHaveValue("P4ssword")
+    })
+    it("sets the password repeat value into state", () => {
+      render(<UserSignupPage />)
+      const passwordRepeat = screen.getByPlaceholderText("Repeat your password")
+      fireEvent.change(passwordRepeat, changeEvent("P4ssword"))
+      expect(passwordRepeat).toHaveValue("P4ssword")
     })
   })
 })
