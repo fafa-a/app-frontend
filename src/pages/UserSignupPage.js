@@ -41,42 +41,52 @@ export class UserSignupPage extends React.Component {
   }
   render() {
     return (
-      <div>
-        <h1>Sign Up</h1>
-        <div>
+      <div className="container">
+        <h1 className="text-center">Sign Up</h1>
+        <div className="col-12 mb-3">
+          <label htmlFor="">Display Name</label>
           <input
+            className="form-control"
             type="text"
             placeholder="Your display name"
             value={this.state.displayName}
             onChange={this.onChangeDisplayName}
           />
         </div>
-        <div>
+        <div className="col-12 mb-3">
+          <label htmlFor="">Username</label>
           <input
+            className="form-control"
             type="text"
             placeholder="Your username"
             value={this.state.username}
             onChange={this.onChangeUsername}
           />
         </div>
-        <div>
+        <div className="col-12 mb-3">
+          <label htmlFor="">Password</label>
           <input
+            className="form-control"
             type="password"
             placeholder="Your password"
             value={this.state.password}
             onChange={this.onChangePassword}
           />
         </div>
-        <div>
+        <div className="col-12 mb-3">
+          <label htmlFor="">Repeat your password</label>
           <input
+            className="form-control"
             type="password"
             placeholder="Repeat your password"
             value={this.state.passwordRepeat}
             onChange={this.onChangePasswordRepeat}
           />
         </div>
-        <div>
-          <button onClick={this.onClickSignup}>Sign Up</button>
+        <div className="text-center">
+          <button className="btn btn-primary" onClick={this.onClickSignup}>
+            Sign Up
+          </button>
         </div>
       </div>
     )
